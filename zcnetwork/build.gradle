@@ -34,8 +34,15 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
 
     // HTTP Communication
-    implementation 'com.squareup.okhttp3:okhttp:3.12.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.14.4'
     implementation 'com.squareup.retrofit2:retrofit:2.7.1'
+
+    // Logging
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
+
+    // Chuck
+    debugImplementation 'com.readystatesoftware.chuck:library:1.1.0'
+    releaseImplementation 'com.readystatesoftware.chuck:library-no-op:1.1.0'
 
     // Jackson core
     implementation 'com.fasterxml.jackson.core:jackson-core:2.9.9'

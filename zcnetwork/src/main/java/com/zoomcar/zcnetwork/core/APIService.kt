@@ -1,10 +1,7 @@
 package com.zoomcar.zcnetwork.core
 
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
-import java.util.*
-import kotlin.collections.HashMap
 
 /*
  * @created 05/01/2020 - 1:20 AM
@@ -15,17 +12,17 @@ import kotlin.collections.HashMap
 interface ZcApiService {
 
     @GET
-    fun getResource(@Url url: String, @QueryMap query: HashMap<String, Any>): Call<ResponseBody>
+    fun <T> getResource(@Url url: String, @QueryMap query: HashMap<String, Any>?): Call<T>
 
     @PUT
-    fun updateResource(@Url url: String, @QueryMap query: HashMap<String, Any>): Call<ResponseBody>
+    fun <T> updateResource(@Url url: String, @QueryMap query: HashMap<String, Any>?): Call<T>
 
     @POST
-    fun createResource(@Url url: String, @QueryMap query: HashMap<String, Any>): Call<ResponseBody>
+    fun <T> createResource(@Url url: String, @QueryMap query: HashMap<String, Any>?): Call<T>
 
     @DELETE
-    fun deleteResource(@Url url: String, @QueryMap query: HashMap<String, Any>): Call<ResponseBody>
+    fun <T> deleteResource(@Url url: String, @QueryMap query: HashMap<String, Any>?): Call<T>
 
     @PATCH
-    fun patchResource(@Url url: String, @QueryMap query: HashMap<String, Any>): Call<ResponseBody>
+    fun <T> patchResource(@Url url: String, @QueryMap query: HashMap<String, Any>?): Call<T>
 }

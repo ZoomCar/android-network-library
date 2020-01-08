@@ -13,6 +13,7 @@ import com.zoomcar.zcnetwork.utils.ErrorString.DEFAULT_RETROFIT_ERROR
 import com.zoomcar.zcnetwork.utils.ErrorString.SERVER_ERROR
 import com.zoomcar.zcnetwork.utils.NetworkResponseStatus.FAILURE
 import com.zoomcar.zcnetwork.utils.NetworkResponseStatus.SUCCESS
+import com.zoomcar.zcnetwork.utils.ZcRequestType
 import com.zoomcar.zcnetwork.utils.getTimeDifferenceInMillis
 import retrofit2.Call
 import retrofit2.Callback
@@ -41,11 +42,13 @@ class ZcNetworkManager(
         fragment: Fragment? = null,
         activity: Activity? = null,
         requestCode: Int = -1,
+        requestType: ZcRequestType,
         headerParams: HashMap<String, String>? = null,
         params: HashMap<String, Any>? = null,
         listener: ZcNetworkListener<T>? = null,
         tag: String? = null,
-        url: String? = null
+        url: String,
+        defaultService: Boolean = true
     ) {
         fun isComponentAdded() = (activity == null || !activity.isFinishing
                 && (fragment == null || fragment.isAdded))
@@ -107,6 +110,18 @@ class ZcNetworkManager(
                     }
                 }
             }
+        }
+        val call: Call<T>?
+        if (defaultService) {
+            val apiService = ZcRequestManager.getInstance(activity!!).getDefaultApiService()
+            call = when (requestType) {
+                ZcRequestType.GET -> apiService.getResource(url, params)
+                ZcRequestType.POST -> apiService.createResource(url, params)
+                ZcRequestType.PUT -> apiService.updateResource(url, params)
+                ZcRequestType.PATCH -> apiService.patchResource(url, params)
+                ZcRequestType.DELETE -> apiService.deleteResource(url, params)
+            }
+            call.run { call.enqueue(callback) }
         }
     }
 
