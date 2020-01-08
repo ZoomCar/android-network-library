@@ -3,9 +3,13 @@ package com.zoomcar.zcnetwork.core
 import android.app.Activity
 import android.content.Context
 import androidx.fragment.app.Fragment
+import com.zoomcar.zcnetwork.error.JavaServiceNetworkError
+import com.zoomcar.zcnetwork.error.NetworkError
 import com.zoomcar.zcnetwork.listeners.ZcNetworkAnalyticsListener
 import com.zoomcar.zcnetwork.models.JavaServiceBaseVO
 import com.zoomcar.zcnetwork.models.JavaServiceErrorDetailVO
+import com.zoomcar.zcnetwork.utils.ErrorCode.NO_NETWORK
+import com.zoomcar.zcnetwork.utils.ErrorString.DEFAULT_RETROFIT_ERROR
 import com.zoomcar.zcnetwork.utils.ErrorString.SERVER_ERROR
 import com.zoomcar.zcnetwork.utils.NetworkResponseStatus.FAILURE
 import com.zoomcar.zcnetwork.utils.NetworkResponseStatus.SUCCESS
@@ -47,7 +51,7 @@ class ZcNetworkManager(
                 && (fragment == null || fragment.isAdded))
 
         val reqStartTime = System.currentTimeMillis()
-        fun invokeResponseTime(responseStatus: String) {
+        fun invokeTimingEvent(responseStatus: String) {
             analyticsListener?.responseTimeEvent(
                 reqStartTime.getTimeDifferenceInMillis(),
                 responseStatus
@@ -57,47 +61,60 @@ class ZcNetworkManager(
         val callback = object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
-                    invokeResponseTime(SUCCESS)
+                    invokeTimingEvent(SUCCESS)
                     if (isComponentAdded()) {
                         listener?.onSuccess(response.body(), 0)
                     }
                 } else {
-                    invokeResponseTime(FAILURE)
-                    response.errorBody()?.let {
+                    invokeTimingEvent(FAILURE)
+                    if (response.errorBody() != null) {
                         return try {
                             when (listener) {
                                 is ZcJavaServiceNetworkListener -> {
+                                    val networkError = listener.buildJavaServiceNetworkError(
+                                        response.code(), response.errorBody()?.bytes()!!
+                                    )
                                     handleJavaServiceNetworkError(
-                                        listener,
-                                        response,
-                                        isComponentAdded()
+                                        networkError, listener, isComponentAdded()
                                     )
                                 }
                                 else -> {
-                                    handleNetworkError(listener, response, isComponentAdded())
+                                    val networkError = listener?.buildNetworkError(
+                                        response.code(), response.errorBody()?.bytes()!!
+                                    )
+                                    handleNetworkError(networkError, listener, isComponentAdded())
                                 }
                             }
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
+                    } else if (isComponentAdded()) {
+                        listener?.onError(NetworkError(response.code(), DEFAULT_RETROFIT_ERROR))
                     }
                 }
             }
 
             override fun onFailure(call: Call<T>, t: Throwable) {
-                invokeResponseTime(FAILURE)
+                invokeTimingEvent(FAILURE)
+                when (listener) {
+                    is ZcJavaServiceNetworkListener -> {
+                        val networkError = JavaServiceNetworkError(httpCode = NO_NETWORK)
+                        handleJavaServiceNetworkError(networkError, listener, isComponentAdded())
+                    }
+                    else -> {
+                        val networkError = NetworkError(NO_NETWORK)
+                        handleNetworkError(networkError, listener, isComponentAdded())
+                    }
+                }
             }
         }
     }
 
     private fun <T> handleJavaServiceNetworkError(
+        networkError: JavaServiceNetworkError,
         listener: ZcJavaServiceNetworkListener<T>,
-        response: Response<T>,
         componentAdded: Boolean
     ) {
-        val networkError = listener.buildJavaServiceNetworkError(
-            response.code(), response.errorBody()?.bytes()!!
-        )
         if (networkError.error == null) networkError.error = JavaServiceBaseVO()
         if (networkError.error?.details == null) {
             networkError.error?.details = JavaServiceErrorDetailVO(message = SERVER_ERROR)
@@ -107,16 +124,13 @@ class ZcNetworkManager(
     }
 
     private fun <T> handleNetworkError(
+        networkError: NetworkError?,
         listener: ZcNetworkListener<T>?,
-        response: Response<T>,
         componentAdded: Boolean
     ) {
-        val networkError = listener?.buildNetworkError(
-            response.code(), response.errorBody()?.bytes()!!
-        )
         networkError?.let {
             analyticsListener?.failureEvent(it)
-            if (componentAdded) listener.onError(it)
+            if (componentAdded) listener?.onError(it)
         }
     }
 }

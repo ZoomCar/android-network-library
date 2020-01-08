@@ -3,6 +3,7 @@ package com.zoomcar.zcnetwork.core
 import com.bluelinelabs.logansquare.LoganSquare
 import com.zoomcar.zcnetwork.error.JavaServiceNetworkError
 import com.zoomcar.zcnetwork.models.JavaServiceBaseVO
+import com.zoomcar.zcnetwork.utils.ErrorCode.NO_NETWORK
 
 /*
   * @created 07/01/2020 - 12:10 PM
@@ -20,7 +21,7 @@ interface ZcJavaServiceNetworkListener<T> : ZcNetworkListener<T> {
             JavaServiceNetworkError(javaServiceBaseVO, httpCode)
         } catch (e: Exception) {
             e.printStackTrace()
-            JavaServiceNetworkError(httpCode = 0)
+            JavaServiceNetworkError(NO_NETWORK)
         }
     }
 }
