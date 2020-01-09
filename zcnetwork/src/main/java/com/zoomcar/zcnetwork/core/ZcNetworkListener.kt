@@ -1,6 +1,7 @@
 package com.zoomcar.zcnetwork.core
 
 import com.bluelinelabs.logansquare.LoganSquare
+import com.google.gson.JsonElement
 import com.zoomcar.zcnetwork.error.NetworkError
 import com.zoomcar.zcnetwork.models.BaseErrorVO
 
@@ -10,8 +11,8 @@ import com.zoomcar.zcnetwork.models.BaseErrorVO
   * @author Paras
   * Copyright (c) 2020 Zoomcar. All rights reserved.
 */
-interface ZcNetworkListener<T> {
-    fun onSuccess(response: T?, responseCode: Int)
+interface ZcNetworkListener {
+    fun onSuccess(response: JsonElement?, responseCode: Int)
     fun onError(error: NetworkError)
 
     fun buildNetworkError(httpCode: Int, data: ByteArray): NetworkError {

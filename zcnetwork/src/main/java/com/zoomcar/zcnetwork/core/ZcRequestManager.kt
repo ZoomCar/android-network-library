@@ -1,7 +1,6 @@
 package com.zoomcar.zcnetwork.core
 
 import android.content.Context
-import com.github.aurae.retrofit2.LoganSquareConverterFactory
 import com.readystatesoftware.chuck.ChuckInterceptor
 import com.zoomcar.zcnetwork.utils.RetrofitConstants
 import com.zoomcar.zcnetwork.utils.TimeoutDefaults
@@ -11,8 +10,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-import kotlin.properties.Delegates
 
 /*
   * @created 05/01/2020 - 10:19 PM
@@ -26,13 +25,13 @@ class ZcRequestManager(
 
     private lateinit var defaultApiService: ZcApiService
     private val retrofit: Retrofit
-    private lateinit var headerMap: HashMap<String, String>
-    private var areLogsEnabled by Delegates.notNull<Boolean>()
+    private var headerMap: HashMap<String, String>? = null
+    private var isDebugLogEnabled: Boolean = false
 
     init {
         retrofit = Retrofit.Builder().baseUrl(getBaseUrl())
             .client(getClient())
-            .addConverterFactory(LoganSquareConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
@@ -59,8 +58,10 @@ class ZcRequestManager(
             var request: Request = chain.request()
             val url: HttpUrl = request.url().newBuilder().build()
             var requestBuilder: Request.Builder = request.newBuilder()
-            for ((key, value) in headerMap) {
-                requestBuilder = requestBuilder.addHeader(key, value)
+            headerMap?.let {
+                for ((key, value) in headerMap!!) {
+                    requestBuilder = requestBuilder.addHeader(key, value)
+                }
             }
             request = requestBuilder.url(url).build()
 
@@ -81,7 +82,7 @@ class ZcRequestManager(
                 .proceed(request)
         }
 
-        if (areLogsEnabled) {
+        if (isDebugLogEnabled) {
             val logging = HttpLoggingInterceptor()
             logging.level = HttpLoggingInterceptor.Level.BODY
             builder.addInterceptor(logging)
@@ -91,7 +92,11 @@ class ZcRequestManager(
         return builder.build()
     }
 
-    private fun getVersion(): String {
-        return ""
+    private fun setHeaderParams(headerMap: HashMap<String, String>) {
+        this.headerMap = headerMap
+    }
+
+    private fun setDebugLog(isDebugLogEnabled: Boolean) {
+        this.isDebugLogEnabled = isDebugLogEnabled
     }
 }

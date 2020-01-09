@@ -1,5 +1,6 @@
 package com.zoomcar.zcnetwork.core
 
+import com.google.gson.JsonElement
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -12,17 +13,17 @@ import retrofit2.http.*
 interface ZcApiService {
 
     @GET
-    fun <T> getResource(@Url url: String, @QueryMap query: HashMap<String, Any>?): Call<T>
+    fun getResource(@Url url: String, @QueryMap query: HashMap<String, Any>?): Call<JsonElement>
 
     @PUT
-    fun <T> updateResource(@Url url: String, @QueryMap query: HashMap<String, Any>?): Call<T>
+    fun updateResource(@Url url: String, @QueryMap query: HashMap<String, Any>?): Call<JsonElement>
 
     @POST
-    fun <T> createResource(@Url url: String, @QueryMap query: HashMap<String, Any>?): Call<T>
+    fun createResource(@Url url: String, @QueryMap query: HashMap<String, Any>?): Call<JsonElement>
 
     @DELETE
-    fun <T> deleteResource(@Url url: String, @QueryMap query: HashMap<String, Any>?): Call<T>
+    fun deleteResource(@Url url: String, @QueryMap query: HashMap<String, Any>?): Call<JsonElement>
 
     @PATCH
-    fun <T> patchResource(@Url url: String, @QueryMap query: HashMap<String, Any>?): Call<T>
+    fun patchResource(@Url url: String, @QueryMap query: HashMap<String, Any>?): Call<JsonElement>
 }

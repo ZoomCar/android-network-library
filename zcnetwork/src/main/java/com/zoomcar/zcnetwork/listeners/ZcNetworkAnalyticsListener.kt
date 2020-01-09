@@ -10,7 +10,7 @@ import com.zoomcar.zcnetwork.error.NetworkError
   * Copyright (c) 2020 Zoomcar. All rights reserved.
 */
 interface ZcNetworkAnalyticsListener {
-    fun responseTimeEvent(timeDiff: Long, status: String)
+    fun responseTimeEvent(timeDiff: Long, status: String, requestCode: Int, requestTag: String?)
     fun failureEvent(error: NetworkError)
     fun javaServiceFailureEvent(error: JavaServiceNetworkError)
 }

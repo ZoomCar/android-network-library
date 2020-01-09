@@ -17,16 +17,7 @@ object ErrorString {
 }
 
 object RetrofitConstants {
-    const val BASE_URL = "https://api.zoomcar.com"
-}
-
-object DefaultParams {
-    const val ANDROID = "android"
-    const val CITY = "city"
-    const val DEVICE_ID = "device_id"
-    const val DEVICE_NAME = "device_name"
-    const val PLATFORM = "platform"
-    const val VERSION = "version"
+    const val BASE_URL = "https://jsonplaceholder.typicode.com"
 }
 
 object TimeoutDefaults {
@@ -39,4 +30,8 @@ object TimeoutHeaders {
     const val CONNECT = "CONNECT_TIMEOUT"
     const val READ = "READ_TIMEOUT"
     const val WRITE = "WRITE_TIMEOUT"
+}
+
+object CustomExceptions {
+    const val NOT_INITIALIZED = "Network client isn't initialized!"
 }
