@@ -16,10 +16,6 @@ object ErrorString {
     const val DEFAULT_RETROFIT_ERROR = "Default Retrofit error"
 }
 
-object RetrofitConstants {
-    const val BASE_URL = "https://jsonplaceholder.typicode.com"
-}
-
 object TimeoutDefaults {
     const val CONNECT = 30000
     const val READ = 30000
@@ -34,6 +30,7 @@ object TimeoutHeaders {
 
 object CustomExceptions {
     const val NOT_INITIALIZED = "Network client isn't initialized!"
+    const val NO_BASE_URL = "Retrofit BASE URL is required!"
 }
 
 object LibTag {

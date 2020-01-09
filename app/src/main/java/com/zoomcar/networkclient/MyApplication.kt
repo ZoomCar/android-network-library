@@ -18,9 +18,10 @@ class MyApplication : Application(), ZcNetworkAnalyticsListener {
 
     override fun onCreate() {
         super.onCreate()
-        ZcNetworkManager.initContext(this)
+        ZcNetworkManager.builder(this)
             .setDebugLog(true)
             .setNetworkAnalyticsListener(this)
+            .addBaseUrl(ApiConstant.BASE_URL)
             .build()
     }
 

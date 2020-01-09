@@ -9,6 +9,7 @@ import com.zoomcar.zcnetwork.error.NetworkError
 import com.zoomcar.zcnetwork.listeners.ZcNetworkAnalyticsListener
 import com.zoomcar.zcnetwork.models.JavaServiceBaseVO
 import com.zoomcar.zcnetwork.models.JavaServiceErrorDetailVO
+import com.zoomcar.zcnetwork.utils.CustomExceptions
 import com.zoomcar.zcnetwork.utils.CustomExceptions.NOT_INITIALIZED
 import com.zoomcar.zcnetwork.utils.ErrorCode.NO_NETWORK
 import com.zoomcar.zcnetwork.utils.ErrorString.DEFAULT_RETROFIT_ERROR
@@ -32,8 +33,9 @@ object ZcNetworkManager {
     private lateinit var applicationContext: Context
     private var zcRequestManager: ZcRequestManager? = null
     private var isDebugLogEnabled: Boolean = false
+    private var baseUrl: String? = null
 
-    fun initContext(applicationContext: Context): ZcNetworkManager =
+    fun builder(applicationContext: Context): ZcNetworkManager =
         apply { this.applicationContext = applicationContext }
 
     fun setDebugLog(isDebugLogEnabled: Boolean): ZcNetworkManager =
@@ -44,8 +46,14 @@ object ZcNetworkManager {
             this.analyticsListener = analyticsListener
         }
 
+    fun addBaseUrl(baseUrl: String?): ZcNetworkManager = apply { this.baseUrl = baseUrl }
+
     fun build() {
-        zcRequestManager = ZcRequestManager.getInstance(applicationContext, isDebugLogEnabled)
+        if (this.baseUrl == null) throw java.lang.IllegalArgumentException(
+            CustomExceptions.NO_BASE_URL
+        )
+        zcRequestManager =
+            ZcRequestManager.getInstance(applicationContext, isDebugLogEnabled, baseUrl!!)
     }
 
     fun request(
@@ -132,7 +140,8 @@ object ZcNetworkManager {
         val call: Call<JsonElement>?
         if (defaultService) {
             val apiService =
-                ZcRequestManager.getInstance(activity, isDebugLogEnabled).getDefaultApiService()
+                ZcRequestManager.getInstance(activity, baseUrl = this.baseUrl!!)
+                    .getDefaultApiService()
             call = when (requestType) {
                 ZcRequestType.GET -> apiService.getResource(url, hashMapOf("key" to "value"))
                 ZcRequestType.POST -> apiService.createResource(url, params)
@@ -149,7 +158,8 @@ object ZcNetworkManager {
         activity: Activity
     ) {
         if (headerParams != null) {
-            ZcRequestManager.getInstance(activity, isDebugLogEnabled).setHeaderParams(headerParams)
+            ZcRequestManager.getInstance(activity, baseUrl = baseUrl!!)
+                .setHeaderParams(headerParams)
         }
     }
 

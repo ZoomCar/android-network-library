@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
@@ -46,8 +47,16 @@ dependencies {
     // Gson
     implementation 'com.google.code.gson:gson:2.8.5'
 
+    // Jackson core
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.9'
+
+    // Logan Square
+    implementation 'com.bluelinelabs:logansquare:1.3.7'
+    implementation 'com.github.aurae.retrofit2:converter-logansquare:1.4.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
+    kapt 'com.bluelinelabs:logansquare-compiler:1.3.7'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-
 }

@@ -2,7 +2,6 @@ package com.zoomcar.zcnetwork.core
 
 import android.content.Context
 import com.readystatesoftware.chuck.ChuckInterceptor
-import com.zoomcar.zcnetwork.utils.RetrofitConstants
 import com.zoomcar.zcnetwork.utils.TimeoutDefaults
 import com.zoomcar.zcnetwork.utils.TimeoutHeaders
 import okhttp3.HttpUrl
@@ -21,7 +20,8 @@ import java.util.concurrent.TimeUnit
 */
 class ZcRequestManager(
     private val applicationContext: Context,
-    private val isDebugLogEnabled: Boolean
+    private val isDebugLogEnabled: Boolean,
+    baseUrl: String
 ) {
 
     private lateinit var defaultApiService: ZcApiService
@@ -29,7 +29,7 @@ class ZcRequestManager(
     private var headerMap: HashMap<String, String>? = null
 
     init {
-        retrofit = Retrofit.Builder().baseUrl(getBaseUrl())
+        retrofit = Retrofit.Builder().baseUrl(baseUrl)
             .client(getClient())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -41,10 +41,11 @@ class ZcRequestManager(
 
         fun getInstance(
             applicationContext: Context,
-            debugLogEnabled: Boolean
+            debugLogEnabled: Boolean = false,
+            baseUrl: String
         ) =
             instance ?: synchronized(applicationContext) {
-                instance ?: ZcRequestManager(applicationContext, debugLogEnabled).also {
+                instance ?: ZcRequestManager(applicationContext, debugLogEnabled, baseUrl).also {
                     instance = it
                 }
             }
@@ -54,8 +55,6 @@ class ZcRequestManager(
         defaultApiService = retrofit.create(ZcApiService::class.java)
         return defaultApiService
     }
-
-    private fun getBaseUrl(): String = RetrofitConstants.BASE_URL
 
     private fun getClient(): OkHttpClient {
         val builder = OkHttpClient.Builder()

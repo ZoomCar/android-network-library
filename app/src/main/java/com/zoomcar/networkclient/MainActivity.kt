@@ -3,6 +3,7 @@ package com.zoomcar.networkclient
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.bluelinelabs.logansquare.LoganSquare
 import com.google.gson.JsonElement
 import com.zoomcar.zcnetwork.core.ZcNetworkBuilder
 import com.zoomcar.zcnetwork.core.ZcNetworkListener
@@ -27,7 +28,8 @@ class MainActivity : AppCompatActivity() {
                         response: JsonElement?,
                         responseCode: Int
                     ) {
-                        Log.d(LibTag.TAG, "onSuccess: ")
+                        val user = LoganSquare.parse(response.toString(), User::class.java)
+                        Log.d(LibTag.TAG, "onSuccess: ${user.name}")
                     }
 
                     override fun onError(error: NetworkError) {
