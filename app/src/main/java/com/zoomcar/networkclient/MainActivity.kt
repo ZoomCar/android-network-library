@@ -7,12 +7,11 @@ import com.google.gson.JsonElement
 import com.zoomcar.zcnetwork.core.ZcNetworkBuilder
 import com.zoomcar.zcnetwork.core.ZcNetworkListener
 import com.zoomcar.zcnetwork.error.NetworkError
+import com.zoomcar.zcnetwork.utils.LibTag
 import com.zoomcar.zcnetwork.utils.ZcRequestType
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-
-    private val TAG = "MainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,18 +20,18 @@ class MainActivity : AppCompatActivity() {
             val zcNetworkBuilder: ZcNetworkBuilder = ZcNetworkBuilder()
                 .setActivity(this)
                 .setRequestType(ZcRequestType.GET)
-                .setHeaderParams(hashMapOf("Accept" to "application/json"))
+                .setHeaderParams(hashMapOf("Accept" to "application/json", "key" to "value"))
                 .setUrl("/users/1")
                 .setListener(object : ZcNetworkListener {
                     override fun onSuccess(
                         response: JsonElement?,
                         responseCode: Int
                     ) {
-                        Log.d(TAG, "onSuccess: ")
+                        Log.d(LibTag.TAG, "onSuccess: ")
                     }
 
                     override fun onError(error: NetworkError) {
-                        Log.d(TAG, "onError: ${error.httpCode}")
+                        Log.d(LibTag.TAG, "onError: ${error.httpCode}")
                     }
                 })
             zcNetworkBuilder.request()

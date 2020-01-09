@@ -20,13 +20,13 @@ import java.util.concurrent.TimeUnit
   * Copyright (c) 2020 Zoomcar. All rights reserved.
 */
 class ZcRequestManager(
-    private val applicationContext: Context
+    private val applicationContext: Context,
+    private val isDebugLogEnabled: Boolean
 ) {
 
     private lateinit var defaultApiService: ZcApiService
     private val retrofit: Retrofit
     private var headerMap: HashMap<String, String>? = null
-    private var isDebugLogEnabled: Boolean = false
 
     init {
         retrofit = Retrofit.Builder().baseUrl(getBaseUrl())
@@ -39,9 +39,14 @@ class ZcRequestManager(
         @Volatile
         private var instance: ZcRequestManager? = null
 
-        fun getInstance(applicationContext: Context) =
+        fun getInstance(
+            applicationContext: Context,
+            debugLogEnabled: Boolean
+        ) =
             instance ?: synchronized(applicationContext) {
-                instance ?: ZcRequestManager(applicationContext).also { instance = it }
+                instance ?: ZcRequestManager(applicationContext, debugLogEnabled).also {
+                    instance = it
+                }
             }
     }
 
@@ -92,11 +97,7 @@ class ZcRequestManager(
         return builder.build()
     }
 
-    private fun setHeaderParams(headerMap: HashMap<String, String>) {
+    fun setHeaderParams(headerMap: HashMap<String, String>) {
         this.headerMap = headerMap
-    }
-
-    private fun setDebugLog(isDebugLogEnabled: Boolean) {
-        this.isDebugLogEnabled = isDebugLogEnabled
     }
 }

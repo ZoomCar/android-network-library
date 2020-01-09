@@ -31,14 +31,21 @@ object ZcNetworkManager {
     private var analyticsListener: ZcNetworkAnalyticsListener? = null
     private lateinit var applicationContext: Context
     private var zcRequestManager: ZcRequestManager? = null
+    private var isDebugLogEnabled: Boolean = false
 
-    fun initNetworkClient(applicationContext: Context) {
-        this.applicationContext = applicationContext
-        zcRequestManager = ZcRequestManager.getInstance(applicationContext)
-    }
+    fun initContext(applicationContext: Context): ZcNetworkManager =
+        apply { this.applicationContext = applicationContext }
 
-    fun setNetworkAnalyticsListener(analyticsListener: ZcNetworkAnalyticsListener) {
-        this.analyticsListener = analyticsListener
+    fun setDebugLog(isDebugLogEnabled: Boolean): ZcNetworkManager =
+        apply { this.isDebugLogEnabled = isDebugLogEnabled }
+
+    fun setNetworkAnalyticsListener(analyticsListener: ZcNetworkAnalyticsListener): ZcNetworkManager =
+        apply {
+            this.analyticsListener = analyticsListener
+        }
+
+    fun build() {
+        zcRequestManager = ZcRequestManager.getInstance(applicationContext, isDebugLogEnabled)
     }
 
     fun request(
@@ -56,6 +63,8 @@ object ZcNetworkManager {
     ) {
 
         if (zcRequestManager == null) throw IllegalArgumentException(NOT_INITIALIZED)
+
+        addHeaderParams(headerParams, activity!!)
 
         fun isComponentAdded() = (activity == null || !activity.isFinishing
                 && (fragment == null || fragment.isAdded))
@@ -123,7 +132,7 @@ object ZcNetworkManager {
         val call: Call<JsonElement>?
         if (defaultService) {
             val apiService =
-                ZcRequestManager.getInstance(activity!!).getDefaultApiService()
+                ZcRequestManager.getInstance(activity, isDebugLogEnabled).getDefaultApiService()
             call = when (requestType) {
                 ZcRequestType.GET -> apiService.getResource(url, hashMapOf("key" to "value"))
                 ZcRequestType.POST -> apiService.createResource(url, params)
@@ -132,6 +141,15 @@ object ZcNetworkManager {
                 ZcRequestType.DELETE -> apiService.deleteResource(url, params)
             }
             call.run { call.enqueue(callback) }
+        }
+    }
+
+    private fun addHeaderParams(
+        headerParams: java.util.HashMap<String, String>?,
+        activity: Activity
+    ) {
+        if (headerParams != null) {
+            ZcRequestManager.getInstance(activity, isDebugLogEnabled).setHeaderParams(headerParams)
         }
     }
 

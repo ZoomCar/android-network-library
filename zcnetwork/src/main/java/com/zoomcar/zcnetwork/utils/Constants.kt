@@ -35,3 +35,7 @@ object TimeoutHeaders {
 object CustomExceptions {
     const val NOT_INITIALIZED = "Network client isn't initialized!"
 }
+
+object LibTag {
+    const val TAG = "ZC Network Client"
+}
