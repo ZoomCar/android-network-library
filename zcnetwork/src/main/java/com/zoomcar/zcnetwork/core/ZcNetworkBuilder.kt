@@ -16,6 +16,7 @@ class ZcNetworkBuilder {
     private var requestCode: Int = 0
     private var headerParams: HashMap<String, String>? = null
     private var requestParams: HashMap<String, Any>? = null
+    private var bodyParams: HashMap<String, Any>? = null
     private var listener: ZcNetworkListener? = null
     private var tag: String? = null
     private lateinit var url: String
@@ -33,6 +34,9 @@ class ZcNetworkBuilder {
 
     fun setRequestParams(requestParams: HashMap<String, Any>): ZcNetworkBuilder =
         apply { this.requestParams = requestParams }
+
+    fun setBodyParams(bodyParams: HashMap<String, Any>): ZcNetworkBuilder =
+        apply { this.bodyParams = bodyParams }
 
     fun setListener(listener: ZcNetworkListener): ZcNetworkBuilder =
         apply { this.listener = listener }
@@ -53,7 +57,8 @@ class ZcNetworkBuilder {
             listener,
             tag,
             url,
-            useDefaultService
+            useDefaultService,
+            bodyParams
         )
     }
 }

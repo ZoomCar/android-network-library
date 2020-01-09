@@ -21,6 +21,9 @@ interface ZcApiService {
     @POST
     fun createResource(@Url url: String, @QueryMap query: HashMap<String, Any>?): Call<JsonElement>
 
+    @POST
+    fun createResourceWithBody(@Url url: String, @Body query: HashMap<String, Any>?): Call<JsonElement>
+
     @DELETE
     fun deleteResource(@Url url: String, @QueryMap query: HashMap<String, Any>?): Call<JsonElement>
 

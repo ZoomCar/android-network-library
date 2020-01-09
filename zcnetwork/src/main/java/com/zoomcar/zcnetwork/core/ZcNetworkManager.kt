@@ -36,38 +36,38 @@ object ZcNetworkManager {
     private var baseUrl: String? = null
 
     fun builder(applicationContext: Context): ZcNetworkManager =
-        apply { this.applicationContext = applicationContext }
+            apply { this.applicationContext = applicationContext }
 
     fun setDebugLog(isDebugLogEnabled: Boolean): ZcNetworkManager =
-        apply { this.isDebugLogEnabled = isDebugLogEnabled }
+            apply { this.isDebugLogEnabled = isDebugLogEnabled }
 
     fun setNetworkAnalyticsListener(analyticsListener: ZcNetworkAnalyticsListener): ZcNetworkManager =
-        apply {
-            this.analyticsListener = analyticsListener
-        }
+            apply {
+                this.analyticsListener = analyticsListener
+            }
 
     fun addBaseUrl(baseUrl: String?): ZcNetworkManager = apply { this.baseUrl = baseUrl }
 
     fun build() {
         if (this.baseUrl == null) throw java.lang.IllegalArgumentException(
-            CustomExceptions.NO_BASE_URL
+                CustomExceptions.NO_BASE_URL
         )
         zcRequestManager =
-            ZcRequestManager.getInstance(applicationContext, isDebugLogEnabled, baseUrl!!)
+                ZcRequestManager.getInstance(applicationContext, isDebugLogEnabled, baseUrl!!)
     }
 
     fun request(
-        fragment: Fragment? = null,
-        activity: Activity? = null,
-        requestCode: Int = -1,
-        requestType: ZcRequestType,
-        headerParams: HashMap<String, String>? = null,
-        params: HashMap<String, Any>? = null,
-        listener: ZcNetworkListener? = null,
-        tag: String? = null,
-        url: String,
-        defaultService: Boolean = true,
-        baseUrl: String? = null
+            fragment: Fragment? = null,
+            activity: Activity? = null,
+            requestCode: Int = -1,
+            requestType: ZcRequestType,
+            headerParams: HashMap<String, String>? = null,
+            requestParams: HashMap<String, Any>? = null,
+            listener: ZcNetworkListener? = null,
+            tag: String? = null,
+            url: String,
+            defaultService: Boolean = true,
+            bodyParams: HashMap<String, Any>? = null
     ) {
 
         if (zcRequestManager == null) throw IllegalArgumentException(NOT_INITIALIZED)
@@ -80,10 +80,10 @@ object ZcNetworkManager {
         val reqStartTime = System.currentTimeMillis()
         fun invokeTimingEvent(responseStatus: String) {
             analyticsListener?.responseTimeEvent(
-                reqStartTime.getTimeDifferenceInMillis(),
-                responseStatus,
-                requestCode,
-                tag
+                    reqStartTime.getTimeDifferenceInMillis(),
+                    responseStatus,
+                    requestCode,
+                    tag
             )
         }
 
@@ -101,15 +101,15 @@ object ZcNetworkManager {
                             when (listener) {
                                 is ZcJavaServiceNetworkListener -> {
                                     val networkError = listener.buildJavaServiceNetworkError(
-                                        response.code(), response.errorBody()?.bytes()!!
+                                            response.code(), response.errorBody()?.bytes()!!
                                     )
                                     handleJavaServiceNetworkError(
-                                        networkError, listener, isComponentAdded()
+                                            networkError, listener, isComponentAdded()
                                     )
                                 }
                                 else -> {
                                     val networkError = listener?.buildNetworkError(
-                                        response.code(), response.errorBody()?.bytes()!!
+                                            response.code(), response.errorBody()?.bytes()!!
                                     )
                                     handleNetworkError(networkError, listener, isComponentAdded())
                                 }
@@ -140,33 +140,34 @@ object ZcNetworkManager {
         val call: Call<JsonElement>?
         if (defaultService) {
             val apiService =
-                ZcRequestManager.getInstance(activity, baseUrl = this.baseUrl!!)
-                    .getDefaultApiService()
+                    ZcRequestManager.getInstance(activity, baseUrl = this.baseUrl!!)
+                            .getDefaultApiService()
             call = when (requestType) {
-                ZcRequestType.GET -> apiService.getResource(url, hashMapOf("key" to "value"))
-                ZcRequestType.POST -> apiService.createResource(url, params)
-                ZcRequestType.PUT -> apiService.updateResource(url, params)
-                ZcRequestType.PATCH -> apiService.patchResource(url, params)
-                ZcRequestType.DELETE -> apiService.deleteResource(url, params)
+                ZcRequestType.GET -> apiService.getResource(url, requestParams)
+                ZcRequestType.POST -> apiService.createResource(url, requestParams)
+                ZcRequestType.PUT -> apiService.updateResource(url, requestParams)
+                ZcRequestType.PATCH -> apiService.patchResource(url, requestParams)
+                ZcRequestType.DELETE -> apiService.deleteResource(url, requestParams)
+                ZcRequestType.POST_WITH_BODY -> apiService.createResourceWithBody(url, bodyParams)
             }
             call.run { call.enqueue(callback) }
         }
     }
 
     private fun addHeaderParams(
-        headerParams: java.util.HashMap<String, String>?,
-        activity: Activity
+            headerParams: java.util.HashMap<String, String>?,
+            activity: Activity
     ) {
         if (headerParams != null) {
             ZcRequestManager.getInstance(activity, baseUrl = baseUrl!!)
-                .setHeaderParams(headerParams)
+                    .setHeaderParams(headerParams)
         }
     }
 
     private fun handleJavaServiceNetworkError(
-        networkError: JavaServiceNetworkError,
-        listener: ZcJavaServiceNetworkListener,
-        componentAdded: Boolean
+            networkError: JavaServiceNetworkError,
+            listener: ZcJavaServiceNetworkListener,
+            componentAdded: Boolean
     ) {
         if (networkError.error == null) networkError.error = JavaServiceBaseVO()
         if (networkError.error?.details == null) {
@@ -177,9 +178,9 @@ object ZcNetworkManager {
     }
 
     private fun handleNetworkError(
-        networkError: NetworkError?,
-        listener: ZcNetworkListener?,
-        componentAdded: Boolean
+            networkError: NetworkError?,
+            listener: ZcNetworkListener?,
+            componentAdded: Boolean
     ) {
         networkError?.let {
             analyticsListener?.failureEvent(it)

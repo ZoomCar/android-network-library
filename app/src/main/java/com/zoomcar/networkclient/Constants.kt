@@ -7,5 +7,5 @@ package com.zoomcar.networkclient
   * Copyright (c) 2020 Zoomcar. All rights reserved.
 */
 object ApiConstant {
-    const val BASE_URL = "https://jsonplaceholder.typicode.com"
+    const val BASE_URL = "https://api.zoomcar.com"
 }
