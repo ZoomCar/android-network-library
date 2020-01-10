@@ -1,7 +1,24 @@
 # android-network-library
-This repo would be used for network library on android
+This is a network client written on top of retrofit to perform network call just by plug n play this
+library.
+
+* This library can perform all the rest api calls (GET, POST, PUT, PATCH, DELETE)
+* It provides custom protocols if user needs to perform any analytics event for failure/success
+* It provides the option to turn on debug logs
 
 ### Getting started
+
+#### Initialization
+
+* Initialize the repository in Application class as follows
+
+```kotlin
+ZcNetworkManager.builder(this)
+    .setDebugLog(true)
+    .setNetworkAnalyticsListener(this)
+    .addBaseUrl(ApiConstant.BASE_URL)
+    .build()
+```
 
 #### Making Rest API Call
 ```kotlin
