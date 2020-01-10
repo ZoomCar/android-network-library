@@ -9,7 +9,6 @@ import com.zoomcar.zcnetwork.utils.ErrorCode.NO_NETWORK
   * @created 07/01/2020 - 12:10 PM
   * @project ZC-Network-Client
   * @author Paras
-  * Copyright (c) 2020 Zoomcar. All rights reserved.
 */
 interface ZcJavaServiceNetworkListener : ZcNetworkListener {
     fun onJavaServiceNetworkError(javaServiceNetworkError: JavaServiceNetworkError)

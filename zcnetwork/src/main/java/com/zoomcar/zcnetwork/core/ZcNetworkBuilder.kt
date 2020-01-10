@@ -8,7 +8,6 @@ import com.zoomcar.zcnetwork.utils.ZcRequestType
   * @created 08/01/2020 - 12:35 PM
   * @project ZC-Network-Client
   * @author Paras
-  * Copyright (c) 2020 Zoomcar. All rights reserved.
 */
 class ZcNetworkBuilder {
     private var activity: Activity? = null

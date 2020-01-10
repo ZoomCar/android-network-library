@@ -26,7 +26,6 @@ import retrofit2.Response
   * @created 05/01/2020 - 10:21 PM
   * @project ZC-Network-Client
   * @author Paras
-  * Copyright (c) 2020 Zoomcar. All rights reserved.
 */
 object ZcNetworkManager {
     private var analyticsListener: ZcNetworkAnalyticsListener? = null

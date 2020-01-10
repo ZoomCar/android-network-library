@@ -9,7 +9,6 @@ import kotlinx.android.parcel.Parcelize
   * @created 09/01/2020 - 3:00 PM
   * @project ZC-Network-Client
   * @author Paras
-  * Copyright (c) 2020 Zoomcar. All rights reserved.
 */
 @Parcelize
 @JsonObject

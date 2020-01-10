@@ -12,7 +12,6 @@ import kotlinx.android.parcel.Parcelize
  * @created 05/01/2020 - 1:00 AM
  * @project ZC-Network-Client
  * @author Paras
- * Copyright (c) 2020 . All rights reserved.
  */
 @Parcelize
 class JavaServiceNetworkError constructor(

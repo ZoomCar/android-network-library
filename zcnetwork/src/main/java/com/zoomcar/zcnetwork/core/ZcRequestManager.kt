@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit
   * @created 05/01/2020 - 10:19 PM
   * @project ZC-Network-Client
   * @author Paras
-  * Copyright (c) 2020 Zoomcar. All rights reserved.
 */
 class ZcRequestManager(
     private val applicationContext: Context,

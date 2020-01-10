@@ -8,7 +8,6 @@ import retrofit2.http.*
  * @created 05/01/2020 - 1:20 AM
  * @project ZC-Network-Client
  * @author Paras
- * Copyright (c) 2020 Zoomcar. All rights reserved.
  */
 interface ZcApiService {
 

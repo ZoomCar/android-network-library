@@ -12,7 +12,6 @@ import com.zoomcar.zcnetwork.utils.LibTag
   * @created 08/01/2020 - 5:35 PM
   * @project ZC-Network-Client
   * @author Paras
-  * Copyright (c) 2020 Zoomcar. All rights reserved.
 */
 class MyApplication : Application(), ZcNetworkAnalyticsListener {
 

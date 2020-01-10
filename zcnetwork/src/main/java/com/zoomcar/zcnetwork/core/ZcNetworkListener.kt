@@ -9,7 +9,6 @@ import com.zoomcar.zcnetwork.models.BaseErrorVO
   * @created 07/01/2020 - 12:09 PM
   * @project ZC-Network-Client
   * @author Paras
-  * Copyright (c) 2020 Zoomcar. All rights reserved.
 */
 interface ZcNetworkListener {
     fun onSuccess(response: JsonElement?, responseCode: Int)
