@@ -15,8 +15,8 @@ class ZcNetworkBuilder {
     private var fragment: Fragment? = null
     private var requestCode: Int = 0
     private var headerParams: HashMap<String, String>? = null
-    private var requestParams: HashMap<String, Any>? = null
-    private var bodyParams: HashMap<String, Any>? = null
+    private var requestParams: HashMap<String, Any> = hashMapOf()
+    private var bodyParams: HashMap<String, Any> = hashMapOf()
     private var listener: ZcNetworkListener? = null
     private var tag: String? = null
     private lateinit var url: String

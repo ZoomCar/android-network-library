@@ -9,7 +9,7 @@ package com.zoomcar.zcnetwork.utils
 enum class ZcRequestType {
     GET,
     POST,
-    POST_WITH_BODY,
+    POST_WITH_REQUEST_PARAMS,
     PATCH,
     PUT,
     DELETE

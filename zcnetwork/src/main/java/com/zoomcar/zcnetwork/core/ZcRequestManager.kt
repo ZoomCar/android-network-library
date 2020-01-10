@@ -19,9 +19,9 @@ import java.util.concurrent.TimeUnit
   * Copyright (c) 2020 Zoomcar. All rights reserved.
 */
 class ZcRequestManager(
-        private val applicationContext: Context,
-        private val isDebugLogEnabled: Boolean,
-        baseUrl: String
+    private val applicationContext: Context,
+    private val isDebugLogEnabled: Boolean,
+    baseUrl: String
 ) {
 
     private lateinit var defaultApiService: ZcApiService
@@ -30,9 +30,9 @@ class ZcRequestManager(
 
     init {
         retrofit = Retrofit.Builder().baseUrl(baseUrl)
-                .client(getClient())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
+            .client(getClient())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
     }
 
     companion object {
@@ -40,16 +40,16 @@ class ZcRequestManager(
         private var instance: ZcRequestManager? = null
 
         fun getInstance(
-                applicationContext: Context,
-                debugLogEnabled: Boolean = false,
-                baseUrl: String
+            applicationContext: Context,
+            debugLogEnabled: Boolean = false,
+            baseUrl: String
         ) =
-                instance ?: synchronized(applicationContext) {
-                    instance
-                            ?: ZcRequestManager(applicationContext, debugLogEnabled, baseUrl).also {
-                                instance = it
-                            }
-                }
+            instance ?: synchronized(applicationContext) {
+                instance
+                    ?: ZcRequestManager(applicationContext, debugLogEnabled, baseUrl).also {
+                        instance = it
+                    }
+            }
     }
 
     fun getDefaultApiService(): ZcApiService {
@@ -82,9 +82,9 @@ class ZcRequestManager(
             request = requestBuilder.build()
 
             chain.withConnectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
-                    .withReadTimeout(readTimeout, TimeUnit.MILLISECONDS)
-                    .withWriteTimeout(writeTimeout, TimeUnit.MILLISECONDS)
-                    .proceed(request)
+                .withReadTimeout(readTimeout, TimeUnit.MILLISECONDS)
+                .withWriteTimeout(writeTimeout, TimeUnit.MILLISECONDS)
+                .proceed(request)
         }
 
         if (isDebugLogEnabled) {

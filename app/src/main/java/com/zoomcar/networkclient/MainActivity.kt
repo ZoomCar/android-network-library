@@ -19,24 +19,24 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         button.setOnClickListener {
             val zcNetworkBuilder: ZcNetworkBuilder = ZcNetworkBuilder()
-                    .setActivity(this)
-                    .setBodyParams(hashMapOf("title" to "foo", "body" to "bar", "userId" to 1))
-                    .setRequestType(ZcRequestType.POST_WITH_BODY)
-                    .setHeaderParams(hashMapOf("Accept" to "application/json", "key" to "value"))
-                    .setUrl("https://jsonplaceholder.typicode.com/posts")
-                    .setListener(object : ZcNetworkListener {
-                        override fun onSuccess(
-                                response: JsonElement?,
-                                responseCode: Int
-                        ) {
-                            val user = LoganSquare.parse(response.toString(), User::class.java)
-                            Log.d(LibTag.TAG, "onSuccess: ${user.name}")
-                        }
+                .setActivity(this)
+                .setBodyParams(hashMapOf("title" to "foo", "body" to "bar", "userId" to 1))
+                .setRequestType(ZcRequestType.POST_WITH_REQUEST_PARAMS)
+                .setHeaderParams(hashMapOf("Accept" to "application/json", "key" to "value"))
+                .setUrl("https://jsonplaceholder.typicode.com/posts")
+                .setListener(object : ZcNetworkListener {
+                    override fun onSuccess(
+                        response: JsonElement?,
+                        responseCode: Int
+                    ) {
+                        val user = LoganSquare.parse(response.toString(), User::class.java)
+                        Log.d(LibTag.TAG, "onSuccess: ${user.name}")
+                    }
 
-                        override fun onError(error: NetworkError) {
-                            Log.d(LibTag.TAG, "onError: ${error.httpCode}")
-                        }
-                    })
+                    override fun onError(error: NetworkError) {
+                        Log.d(LibTag.TAG, "onError: ${error.httpCode}")
+                    }
+                })
             zcNetworkBuilder.request()
         }
     }

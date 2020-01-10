@@ -19,10 +19,14 @@ interface ZcApiService {
     fun updateResource(@Url url: String, @QueryMap query: HashMap<String, Any>?): Call<JsonElement>
 
     @POST
-    fun createResource(@Url url: String, @QueryMap query: HashMap<String, Any>?): Call<JsonElement>
+    fun createResource(@Url url: String, @Body bodyParams: HashMap<String, Any>?): Call<JsonElement>
 
     @POST
-    fun createResourceWithBody(@Url url: String, @Body query: HashMap<String, Any>?): Call<JsonElement>
+    fun createResourceWithParams(
+        @Url url: String,
+        @QueryMap queryParams: HashMap<String, Any>?,
+        @Body bodyParams: HashMap<String, Any>?
+    ): Call<JsonElement>
 
     @DELETE
     fun deleteResource(@Url url: String, @QueryMap query: HashMap<String, Any>?): Call<JsonElement>
