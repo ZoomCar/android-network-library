@@ -8,6 +8,21 @@ library.
 
 ### Getting started
 
+#### Using ZC-Network-Client in your application
+* Add the JitPack repository to your build file
+```
+allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+```
+* Add the dependency
+```
+implementation 'com.github.ZoomCar:android-network-library:Tag'
+```
+
 #### Initialization
 
 * Initialize the repository in Application class as follows
