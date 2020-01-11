@@ -20,7 +20,7 @@ allprojects {
 ```
 * Add the dependency
 ```
-implementation 'com.github.ZoomCar:android-network-library:Tag'
+implementation 'com.github.ZoomCar:android-network-library:1.0.1'
 ```
 
 #### Initialization
