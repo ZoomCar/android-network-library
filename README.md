@@ -18,9 +18,26 @@ allprojects {
 	}
 }
 ```
-* Add the dependency
+* Add the library dependency
 ```
 implementation 'com.github.ZoomCar:android-network-library:1.0.1'
+```
+
+* Add third party dependencies, [Chuck Http Interceptor](https://github.com/jgilfelt/chuck) for logging, 
+[GSON](https://github.com/google/gson) or [LoganSquare](https://github.com/bluelinelabs/LoganSquare) for parsing
+```
+debugImplementation 'com.readystatesoftware.chuck:library:1.1.0'
+releaseImplementation 'com.readystatesoftware.chuck:library-no-op:1.1.0'
+
+Gson
+implementation 'com.google.code.gson:gson:2.8.5'
+
+LoganSquare
+implementation 'com.bluelinelabs:logansquare:1.3.7'
+kapt 'com.bluelinelabs:logansquare-compiler:1.3.7'
+
+Jackson core
+implementation 'com.fasterxml.jackson.core:jackson-core:2.9.9'
 ```
 
 #### Initialization
