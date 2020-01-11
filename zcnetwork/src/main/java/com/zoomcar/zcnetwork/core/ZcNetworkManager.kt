@@ -91,7 +91,7 @@ object ZcNetworkManager {
                 if (response.isSuccessful) {
                     invokeTimingEvent(SUCCESS)
                     if (isComponentAdded()) {
-                        listener?.onSuccess(response.body()?.asJsonObject, 0)
+                        listener?.onSuccess(response.body(), requestCode)
                     }
                 } else {
                     invokeTimingEvent(FAILURE)

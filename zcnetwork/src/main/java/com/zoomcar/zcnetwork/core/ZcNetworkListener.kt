@@ -11,7 +11,7 @@ import com.zoomcar.zcnetwork.models.BaseErrorVO
   * @author Paras
 */
 interface ZcNetworkListener {
-    fun onSuccess(response: JsonElement?, responseCode: Int)
+    fun onSuccess(response: JsonElement?, requestCode: Int)
     fun onError(error: NetworkError)
 
     fun buildNetworkError(httpCode: Int, data: ByteArray): NetworkError {

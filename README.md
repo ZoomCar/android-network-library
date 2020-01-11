@@ -25,15 +25,15 @@ ZcNetworkManager.builder(this)
 val zcNetworkBuilder: ZcNetworkBuilder = ZcNetworkBuilder()
     .setActivity(this)
     .setBodyParams(hashMapOf("title" to "foo", "body" to "bar", "userId" to 1))
-    .setRequestType(ZcRequestType.POST)
+    .setRequestType(ZcRequestType.GET)
     .setHeaderParams(hashMapOf("Accept" to "application/json", "key" to "value"))
-    .setUrl("<API Url>")
+    .setUrl("https://jsonplaceholder.typicode.com/users/1")
     .setListener(object : ZcNetworkListener {
         override fun onSuccess(
             response: JsonElement?,
-            responseCode: Int
+            requestCode: Int
         ) {
-            val user = LoganSquare.parse(response.toString(), User::class.java)
+            val user = LoganSquare.parse(response?.asJsonObject.toString(), User::class.java)
             Log.d(LibTag.TAG, "onSuccess: ${user.name}")
         }
 
@@ -42,6 +42,32 @@ val zcNetworkBuilder: ZcNetworkBuilder = ZcNetworkBuilder()
         }
     })
 zcNetworkBuilder.request()
+```
+
+#### Parsing
+
+* Any parsing library can be used to parse the jsonString response [GSON](https://github.com/google/gson) 
+or [LoganSquare](https://github.com/bluelinelabs/LoganSquare)
+* Below examples are parsed using LoganSquare
+
+##### For JsonObject
+```kotlin
+override fun onSuccess(
+    response: JsonElement?,
+    requestCode: Int
+){
+    val user = LoganSquare.parse(response?.asJsonObject.toString(), User::class.java)
+}
+```
+
+##### For JsonArray
+```kotlin
+override fun onSuccess(
+    response: JsonElement?,
+    requestCode: Int
+){
+    val listOfUser = LoganSquare.parseList(response?.asJsonArray.toString(), User::class.java)
+}
 ```
 
 ### Find this project useful ? :heart:
