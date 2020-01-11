@@ -9,14 +9,14 @@ library.
 ### Getting started
 
 #### Using ZC-Network-Client in your application
-* Add the JitPack repository to your build file
+* Add the JitPack repository to your project level build file.
 ```
 allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
+	repositories {
+		...
+		maven { url 'https://jitpack.io' }
 	}
+}
 ```
 * Add the dependency
 ```
