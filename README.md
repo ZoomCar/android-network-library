@@ -1,3 +1,7 @@
+[![GitHub version](https://badge.fury.io/gh/ZoomCar%2Fandroid-network-library.svg)](https://badge.fury.io/gh/ZoomCar%2Fandroid-network-library)
+[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=102)](https://opensource.org/licenses/Apache-2.0)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/ZoomCar/android-network-library/blob/master/LICENSE)
+
 # android-network-library
 This is a network client written on top of retrofit to perform network call just by plug n play this
 library.
