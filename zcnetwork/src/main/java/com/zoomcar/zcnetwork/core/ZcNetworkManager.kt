@@ -71,7 +71,7 @@ object ZcNetworkManager {
 
         if (zcRequestManager == null) throw IllegalArgumentException(NOT_INITIALIZED)
 
-        addHeaderParams(headerParams, activity!!)
+        addHeaderParams(headerParams, applicationContext)
 
         fun isComponentAdded() = (activity == null || !activity.isFinishing
                 && (fragment == null || fragment.isAdded))
@@ -139,7 +139,7 @@ object ZcNetworkManager {
         val call: Call<JsonElement>?
         if (defaultService) {
             val apiService =
-                ZcRequestManager.getInstance(activity, baseUrl = this.baseUrl!!)
+                ZcRequestManager.getInstance(applicationContext, baseUrl = this.baseUrl!!)
                     .getDefaultApiService()
             call = when (requestType) {
                 ZcRequestType.GET -> apiService.getResource(url, requestParams)
@@ -159,10 +159,10 @@ object ZcNetworkManager {
 
     private fun addHeaderParams(
         headerParams: java.util.HashMap<String, String>?,
-        activity: Activity
+        applicationContext: Context
     ) {
         if (headerParams != null) {
-            ZcRequestManager.getInstance(activity, baseUrl = baseUrl!!)
+            ZcRequestManager.getInstance(applicationContext, baseUrl = baseUrl!!)
                 .setHeaderParams(headerParams)
         }
     }
