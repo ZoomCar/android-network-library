@@ -9,7 +9,7 @@ import com.zoomcar.zcnetwork.error.NetworkError
   * @author Paras
 */
 interface ZcNetworkAnalyticsListener {
-    fun responseTimeEvent(timeDiff: Long, status: String, requestCode: Int, requestTag: String?)
-    fun failureEvent(error: NetworkError)
-    fun javaServiceFailureEvent(error: JavaServiceNetworkError)
+    fun responseTimeEvent(timeDiff: Long, status: String, requestCode: Int = -1, requestTag: String?)
+    fun failureEvent(error: NetworkError, requestCode: Int = -1, requestTag: String?)
+    fun javaServiceFailureEvent(error: JavaServiceNetworkError, requestCode: Int = -1, requestTag: String?)
 }

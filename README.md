@@ -24,7 +24,7 @@ allprojects {
 ```
 * Add the library dependency
 ```
-implementation 'com.github.ZoomCar:android-network-library:1.0.3'
+implementation 'com.github.ZoomCar:android-network-library:1.0.4'
 ```
 
 * Add third party dependencies, [Chuck Http Interceptor](https://github.com/jgilfelt/chuck) for logging, 
