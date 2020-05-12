@@ -18,26 +18,28 @@ class MyApplication : Application(), ZcNetworkAnalyticsListener {
     override fun onCreate() {
         super.onCreate()
         ZcNetworkManager.builder(this)
-                .setDebugLog(true)
-                .setNetworkAnalyticsListener(this)
-                .addBaseUrl(ApiConstant.BASE_URL)
-                .build()
+            .setDebugLog(true)
+            .setNetworkAnalyticsListener(this)
+            .addBaseUrl(ApiConstant.BASE_URL)
+            .build()
     }
 
     override fun responseTimeEvent(
-            timeDiff: Long,
-            status: String,
-            requestCode: Int,
-            requestTag: String?
+        timeDiff: Long,
+        status: String,
+        requestCode: Int,
+        requestTag: String?
     ) {
         Log.d(LibTag.TAG, "responseTimeEvent: ")
     }
 
-    override fun failureEvent(error: NetworkError, requestTag: String?) {
+    override fun failureEvent(error: NetworkError, requestCode: Int, requestTag: String?) {
         Log.d(LibTag.TAG, "failureEvent: ")
     }
 
-    override fun javaServiceFailureEvent(error: JavaServiceNetworkError, requestTag: String?) {
+    override fun javaServiceFailureEvent(
+        error: JavaServiceNetworkError, requestCode: Int, requestTag: String?
+    ) {
         Log.d(LibTag.TAG, "javaServiceFailureEvent: ")
     }
 }
