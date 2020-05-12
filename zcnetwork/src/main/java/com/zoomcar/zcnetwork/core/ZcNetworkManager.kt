@@ -103,14 +103,14 @@ object ZcNetworkManager {
                                         response.code(), response.errorBody()?.bytes()!!
                                     )
                                     handleJavaServiceNetworkError(
-                                        networkError, listener, isComponentAdded()
+                                        networkError, listener, isComponentAdded(), tag
                                     )
                                 }
                                 else -> {
                                     val networkError = listener?.buildNetworkError(
                                         response.code(), response.errorBody()?.bytes()!!
                                     )
-                                    handleNetworkError(networkError, listener, isComponentAdded())
+                                    handleNetworkError(networkError, listener, isComponentAdded(), tag)
                                 }
                             }
                         } catch (e: Exception) {
@@ -127,11 +127,11 @@ object ZcNetworkManager {
                 when (listener) {
                     is ZcJavaServiceNetworkListener -> {
                         val networkError = JavaServiceNetworkError(httpCode = NO_NETWORK)
-                        handleJavaServiceNetworkError(networkError, listener, isComponentAdded())
+                        handleJavaServiceNetworkError(networkError, listener, isComponentAdded(), tag)
                     }
                     else -> {
                         val networkError = NetworkError(NO_NETWORK)
-                        handleNetworkError(networkError, listener, isComponentAdded())
+                        handleNetworkError(networkError, listener, isComponentAdded(), tag)
                     }
                 }
             }
@@ -170,23 +170,25 @@ object ZcNetworkManager {
     private fun handleJavaServiceNetworkError(
         networkError: JavaServiceNetworkError,
         listener: ZcJavaServiceNetworkListener,
-        componentAdded: Boolean
+        componentAdded: Boolean,
+        tag: String?
     ) {
         if (networkError.error == null) networkError.error = JavaServiceBaseVO()
         if (networkError.error?.details == null) {
             networkError.error?.details = JavaServiceErrorDetailVO(message = SERVER_ERROR)
         }
-        networkError.error?.code?.run { analyticsListener?.javaServiceFailureEvent(networkError) }
+        networkError.error?.code?.run { analyticsListener?.javaServiceFailureEvent(networkError, tag) }
         if (componentAdded) listener.onJavaServiceNetworkError(networkError)
     }
 
     private fun handleNetworkError(
         networkError: NetworkError?,
         listener: ZcNetworkListener?,
-        componentAdded: Boolean
+        componentAdded: Boolean,
+        tag: String?
     ) {
         networkError?.let {
-            analyticsListener?.failureEvent(it)
+            analyticsListener?.failureEvent(it, tag)
             if (componentAdded) listener?.onError(it)
         }
     }

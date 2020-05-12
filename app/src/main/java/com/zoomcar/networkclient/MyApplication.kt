@@ -33,11 +33,11 @@ class MyApplication : Application(), ZcNetworkAnalyticsListener {
         Log.d(LibTag.TAG, "responseTimeEvent: ")
     }
 
-    override fun failureEvent(error: NetworkError) {
+    override fun failureEvent(error: NetworkError, requestTag: String?) {
         Log.d(LibTag.TAG, "failureEvent: ")
     }
 
-    override fun javaServiceFailureEvent(error: JavaServiceNetworkError) {
+    override fun javaServiceFailureEvent(error: JavaServiceNetworkError, requestTag: String?) {
         Log.d(LibTag.TAG, "javaServiceFailureEvent: ")
     }
 }
