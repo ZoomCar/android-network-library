@@ -1,6 +1,7 @@
 package com.zoomcar.zcnetwork.core
 
 import com.bluelinelabs.logansquare.LoganSquare
+import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.zoomcar.zcnetwork.error.NetworkError
 import com.zoomcar.zcnetwork.models.BaseErrorVO
@@ -17,7 +18,7 @@ interface ZcNetworkListener {
     fun buildNetworkError(httpCode: Int, data: ByteArray): NetworkError {
         val baseErrorVO: BaseErrorVO
         return try {
-            baseErrorVO = LoganSquare.parse(String(data), BaseErrorVO::class.java)
+            baseErrorVO = Gson().fromJson(String(data), BaseErrorVO::class.java)
             NetworkError(httpCode, baseErrorVO)
         } catch (e: Exception) {
             e.printStackTrace()
