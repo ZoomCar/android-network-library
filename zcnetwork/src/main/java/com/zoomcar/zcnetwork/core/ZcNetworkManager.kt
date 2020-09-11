@@ -157,15 +157,10 @@ object ZcNetworkManager {
                     .getDefaultApiService()
             call = when (requestType) {
                 ZcRequestType.GET -> apiService.getResource(url, requestParams)
-                ZcRequestType.POST -> apiService.createResource(url, bodyParams)
-                ZcRequestType.PUT -> apiService.updateResource(url, requestParams)
+                ZcRequestType.POST -> apiService.createResource(url, requestParams, bodyParams)
+                ZcRequestType.PUT -> apiService.updateResource(url, requestParams, bodyParams)
+                ZcRequestType.DELETE -> apiService.deleteResource(url, requestParams, bodyParams)
                 ZcRequestType.PATCH -> apiService.patchResource(url, requestParams)
-                ZcRequestType.DELETE -> apiService.deleteResource(url, requestParams)
-                ZcRequestType.POST_WITH_REQUEST_PARAMS -> apiService.createResourceWithParams(
-                    url,
-                    requestParams,
-                    bodyParams
-                )
             }
             call.run { call.enqueue(callback) }
         }
