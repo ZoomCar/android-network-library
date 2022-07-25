@@ -3,21 +3,23 @@ package com.zoomcar.networkclient
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import com.bluelinelabs.logansquare.LoganSquare
 import com.google.gson.JsonElement
+import com.zoomcar.networkclient.databinding.ActivityMainBinding
 import com.zoomcar.zcnetwork.core.ZcNetworkBuilder
 import com.zoomcar.zcnetwork.core.ZcNetworkListener
 import com.zoomcar.zcnetwork.error.NetworkError
 import com.zoomcar.zcnetwork.utils.LibTag
 import com.zoomcar.zcnetwork.utils.ZcRequestType
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        button.setOnClickListener {
+        val binding: ActivityMainBinding =
+            DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.button.setOnClickListener {
             val zcNetworkBuilder: ZcNetworkBuilder = ZcNetworkBuilder()
                 .setActivity(this)
                 .setBodyParams(hashMapOf("title" to "foo", "body" to "bar", "userId" to 1))

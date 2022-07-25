@@ -18,6 +18,7 @@ import com.zoomcar.zcnetwork.utils.NetworkResponseStatus.FAILURE
 import com.zoomcar.zcnetwork.utils.NetworkResponseStatus.SUCCESS
 import com.zoomcar.zcnetwork.utils.ZcRequestType
 import com.zoomcar.zcnetwork.utils.getTimeDifferenceInMillis
+import okhttp3.Interceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,6 +34,7 @@ object ZcNetworkManager {
     private var zcRequestManager: ZcRequestManager? = null
     private var isDebugLogEnabled: Boolean = false
     private var baseUrl: String? = null
+    private var interceptors: MutableList<Interceptor> = mutableListOf()
 
     fun builder(applicationContext: Context): ZcNetworkManager =
         apply { this.applicationContext = applicationContext }
@@ -45,6 +47,11 @@ object ZcNetworkManager {
             this.analyticsListener = analyticsListener
         }
 
+    fun addInterceptor(interceptor: Interceptor): ZcNetworkManager =
+        apply {
+            this.interceptors.add(interceptor)
+        }
+
     fun addBaseUrl(baseUrl: String?): ZcNetworkManager = apply { this.baseUrl = baseUrl }
 
     fun build() {
@@ -52,7 +59,7 @@ object ZcNetworkManager {
             CustomExceptions.NO_BASE_URL
         )
         zcRequestManager =
-            ZcRequestManager.getInstance(applicationContext, isDebugLogEnabled, baseUrl!!)
+            ZcRequestManager.getInstance(applicationContext, isDebugLogEnabled, baseUrl!!, interceptors)
     }
 
     fun request(
@@ -66,7 +73,8 @@ object ZcNetworkManager {
         tag: String? = null,
         url: String,
         defaultService: Boolean = true,
-        bodyParams: HashMap<String, Any>
+        bodyParams: HashMap<String, Any>,
+        interceptors: MutableList<Interceptor>
     ) {
 
         if (zcRequestManager == null) throw IllegalArgumentException(NOT_INITIALIZED)
@@ -153,7 +161,7 @@ object ZcNetworkManager {
         val call: Call<JsonElement>?
         if (defaultService) {
             val apiService =
-                ZcRequestManager.getInstance(applicationContext, baseUrl = this.baseUrl!!)
+                ZcRequestManager.getInstance(applicationContext, baseUrl = this.baseUrl!!, interceptor = interceptors)
                     .getDefaultApiService()
             call = when (requestType) {
                 ZcRequestType.GET -> apiService.getResource(url, requestParams)
@@ -171,7 +179,7 @@ object ZcNetworkManager {
         applicationContext: Context
     ) {
         if (headerParams != null) {
-            ZcRequestManager.getInstance(applicationContext, baseUrl = baseUrl!!)
+            ZcRequestManager.getInstance(applicationContext, baseUrl = baseUrl!!, interceptor = interceptors)
                 .setHeaderParams(headerParams)
         }
     }

@@ -5,6 +5,7 @@ import com.readystatesoftware.chuck.ChuckInterceptor
 import com.zoomcar.zcnetwork.utils.TimeoutDefaults
 import com.zoomcar.zcnetwork.utils.TimeoutHeaders
 import okhttp3.HttpUrl
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
@@ -20,7 +21,8 @@ import java.util.concurrent.TimeUnit
 class ZcRequestManager(
     private val applicationContext: Context,
     private val isDebugLogEnabled: Boolean,
-    baseUrl: String
+    baseUrl: String,
+    private val interceptors: List<Interceptor>
 ) {
 
     private lateinit var defaultApiService: ZcApiService
@@ -41,11 +43,17 @@ class ZcRequestManager(
         fun getInstance(
             applicationContext: Context,
             debugLogEnabled: Boolean = false,
-            baseUrl: String
+            baseUrl: String,
+            interceptor: List<Interceptor> = listOf()
         ) =
             instance ?: synchronized(applicationContext) {
                 instance
-                    ?: ZcRequestManager(applicationContext, debugLogEnabled, baseUrl).also {
+                    ?: ZcRequestManager(
+                        applicationContext,
+                        debugLogEnabled,
+                        baseUrl,
+                        interceptor
+                    ).also {
                         instance = it
                     }
             }
@@ -90,6 +98,9 @@ class ZcRequestManager(
             val logging = HttpLoggingInterceptor()
             logging.level = HttpLoggingInterceptor.Level.BODY
             builder.addInterceptor(logging)
+            interceptors.map {
+                builder.addInterceptor(it)
+            }
             builder.addInterceptor(ChuckInterceptor(applicationContext))
         }
 
