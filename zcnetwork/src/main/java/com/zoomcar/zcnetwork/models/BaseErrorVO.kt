@@ -11,6 +11,7 @@ import kotlinx.android.parcel.RawValue
 @JsonObject
 open class BaseErrorVO : Parcelable {
     @JsonField
+    @SerializedName(value = "status")
     var status: Int = 0
 
     @SerializedName(value = "error_code")
@@ -21,12 +22,15 @@ open class BaseErrorVO : Parcelable {
     @JsonField(name = ["error_title"])
     var errorTitle: String? = null
 
+    @SerializedName("msg")
     @JsonField
     var msg: String? = null
 
     @JsonField
+    @SerializedName("httpStatusCode")
     var httpStatusCode: Int = 0
 
     @JsonField(name = ["metadata"])
+    @SerializedName("metadata")
     var metadata: MutableMap<String, @RawValue Any?>? = null
 }
